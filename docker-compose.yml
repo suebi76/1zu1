@@ -1,0 +1,10 @@
+services:
+  chatbot:
+    image: ghcr.io/suebi76/1zu1:latest
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./config:/var/www/html/config
+      - ./rag:/var/www/html/rag
+    restart: unless-stopped
