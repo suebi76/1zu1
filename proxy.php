@@ -17,16 +17,31 @@
 
 // ── Konfiguration aus per .htaccess gesperrtem Unterverzeichnis ──────────────
 $configFile = __DIR__ . '/config/config.php';
-if (!file_exists($configFile)) {
-    http_response_code(500);
-    exit(json_encode(['error' => 'Serverkonfiguration fehlt.']));
+$configExists = file_exists($configFile);
+if ($configExists) {
+    require $configFile;
 }
-require $configFile;
+
+// ── GET = API-Status-Check ────────────────────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    header('Content-Type: application/json');
+    $needsKey = !$configExists
+             || !defined('GEMINI_API_KEY')
+             || GEMINI_API_KEY === 'DEIN_GEMINI_API_KEY_HIER'
+             || GEMINI_API_KEY === 'DEIN_KEY_AUS_GOOGLE_AI_STUDIO';
+    echo json_encode(['status' => $needsKey ? 'no_key' : 'ok']);
+    exit;
+}
 
 // ── Nur POST erlauben ─────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     exit('Method Not Allowed');
+}
+
+if (!$configExists) {
+    http_response_code(500);
+    exit(json_encode(['error' => 'Serverkonfiguration fehlt.']));
 }
 
 // ── Anfrage-Body lesen ────────────────────────────────────────────────────────

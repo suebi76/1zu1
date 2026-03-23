@@ -42,6 +42,17 @@ $msg      = '';
 $msgType  = 'info';
 $newChunks = [];
 
+// ── Weiterleitung vom Chatbot: API-Key fehlt/ungültig ────────────────────────
+if (isset($_GET['msg'])) {
+    if ($_GET['msg'] === 'api_key_missing') {
+        $msg = 'Der Chatbot benötigt einen gültigen Gemini API-Key. Bitte hier eintragen.';
+        $msgType = 'error';
+    } elseif ($_GET['msg'] === 'api_key_invalid') {
+        $msg = 'Der API-Key ist ungültig oder funktioniert nicht. Bitte prüfen und erneut eintragen.';
+        $msgType = 'error';
+    }
+}
+
 // ── Erster Start: Passwort festlegen ─────────────────────────────────────────
 if ($firstRun) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'setup') {

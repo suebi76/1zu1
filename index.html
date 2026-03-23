@@ -127,6 +127,18 @@
             const scrollRef  = useRef(null);
             const autoScroll = useRef(true);
 
+            // API-Key-Status beim Laden prüfen
+            useEffect(() => {
+                fetch(API_PROXY)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.status === 'no_key') {
+                            window.location.href = 'admin.php?msg=api_key_missing';
+                        }
+                    })
+                    .catch(() => {});
+            }, []);
+
             // Automatisch nach unten scrollen, solange der Nutzer unten ist
             useEffect(() => {
                 if (autoScroll.current && scrollRef.current) {
@@ -213,7 +225,14 @@ QUALITAETSSTANDARDS:
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    if (!response.ok) throw new Error('Serverfehler');
+                    if (!response.ok) {
+                        if (response.status === 400 || response.status === 403 || response.status === 401) {
+                            setError("API-Key fehlt oder ist ungültig. Sie werden zum Admin-Bereich weitergeleitet...");
+                            setTimeout(() => { window.location.href = 'admin.php?msg=api_key_invalid'; }, 2500);
+                            return;
+                        }
+                        throw new Error('Serverfehler');
+                    }
 
                     setMessages(prev => [...prev, { role: 'bot', text: '' }]);
                     setIsLoading(false);
@@ -239,6 +258,18 @@ QUALITAETSSTANDARDS:
                             if (!jsonStr || jsonStr === '[DONE]') continue;
                             try {
                                 const data  = JSON.parse(jsonStr);
+                                // API-Key-Fehler erkennen (Gemini gibt error-Objekt zurück)
+                                if (data.error) {
+                                    const code = data.error.code || 0;
+                                    const errMsg = data.error.message || '';
+                                    if (code === 400 || code === 403 || code === 401 || errMsg.toLowerCase().includes('api key')) {
+                                        setMessages(prev => prev.slice(0, -1));
+                                        setError("API-Key fehlt oder ist ungültig. Sie werden zum Admin-Bereich weitergeleitet...");
+                                        setIsStreaming(false);
+                                        setTimeout(() => { window.location.href = 'admin.php?msg=api_key_invalid'; }, 2500);
+                                        return;
+                                    }
+                                }
                                 const chunk = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
                                 if (chunk) {
                                     fullText += chunk;
