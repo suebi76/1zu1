@@ -5,6 +5,10 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./config:/var/www/html/config
-      - ./rag:/var/www/html/rag
+      - chatbot-config:/var/www/html/config
+      - chatbot-rag:/var/www/html/rag
     restart: unless-stopped
+
+volumes:
+  chatbot-config:
+  chatbot-rag:
