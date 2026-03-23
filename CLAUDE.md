@@ -26,18 +26,21 @@ kein CDN, kein npm, keine Kompilierung nötig. Änderungen an `index.html` sind 
 ## Dateistruktur
 
 ```
-index.html          Komplette React-App (Babel, Tailwind, marked, jsPDF — alles inline)
-proxy.php           Gemini-API-Proxy: empfängt POST, injiziert RAG-Chunks, streamt SSE zurück
-admin.php           Admin-Interface: Passwort-Setup, PDF-Upload → Gemini → Chunks
+index.html              Komplette React-App (Babel, Tailwind, marked, jsPDF — alles inline)
+proxy.php               Gemini-API-Proxy: RAG-Chunks einbetten, SSE-Streaming, API-Key-Status-Check
+admin.php               Admin-Interface: Passwort-Setup, API-Key-Setup, PDF-Upload → Chunks
+Dockerfile              Container-Image (PHP 8.3 + Apache)
+docker-compose.yml      Docker Compose mit persistenten Volumes
+docker-entrypoint.sh    Initialisiert Volumes beim ersten Container-Start
 config/
-  config.php        GEMINI_API_KEY + MODEL_NAME (via .htaccess gegen HTTP gesperrt)
-  .htaccess         Blockiert HTTP-Zugriff auf config/
+  config.php            GEMINI_API_KEY + MODEL_NAME (via .htaccess gegen HTTP gesperrt)
+  .htaccess             Blockiert HTTP-Zugriff auf config/
 rag/
-  .htaccess         Blockiert HTTP-Zugriff auf rag/
-  .admin_password   bcrypt-Hash des Admin-Passworts (wird bei erstem admin.php-Aufruf erstellt)
-  ANLEITUNG.md      Format-Dokumentation für manuelle Chunks
-  chunks/*.md       Wissensdatenbank – 26 Chunks zum 1:1-Ausstattungsprogramm
-vendor/             Lokale Kopien: react, react-dom, babel, tailwind, marked, jspdf
+  .htaccess             Blockiert HTTP-Zugriff auf rag/
+  .admin_password       bcrypt-Hash des Admin-Passworts (wird bei erstem admin.php-Aufruf erstellt)
+  ANLEITUNG.md          Format-Dokumentation für manuelle Chunks
+  chunks/*.md           Wissensdatenbank – 26 Chunks zum 1:1-Ausstattungsprogramm
+vendor/                 Lokale Kopien: react, react-dom, babel, tailwind, marked, jspdf
 ```
 
 ---
@@ -111,9 +114,13 @@ Inhalt (200-600 Wörter, Markdown mit ## Überschriften und - Listen).
 
 ## Dateien die NICHT geändert werden
 
-- `proxy.php` — unverändert vom Basis-Repository
 - `vendor/*` — alle 6 JS-Dateien unverändert
 - `.htaccess`-Dateien — unverändert
+
+## proxy.php – Anpassungen gegenüber Basis-Repository
+
+- **API-Key-Status-Check**: GET-Request gibt `{"status":"no_key"}` oder `{"status":"ok"}` zurück
+- Config-Laden umstrukturiert: Status-Check funktioniert auch ohne vorhandene config.php
 
 ## admin.php – Anpassungen gegenüber Basis-Repository
 
@@ -123,3 +130,11 @@ Inhalt (200-600 Wörter, Markdown mit ## Überschriften und - Listen).
 - Quelle-Format: „Dokumenttitel, Version, Bildungsportal Niedersachsen"
 - maxOutputTokens auf 16384 erhöht (für längere PDFs)
 - UI-Texte: „KI-Didaktik Chat" → „1:1-Ausstattung"
+- **Chatbot-Weiterleitung**: Zeigt Hinweismeldung bei `?msg=api_key_missing` oder `?msg=api_key_invalid`
+
+## Docker
+
+- `Dockerfile`: PHP 8.3 + Apache, mod_rewrite, .htaccess-Support
+- `docker-entrypoint.sh`: Kopiert Defaults (Chunks, .htaccess, Config-Vorlage) in leere Volumes
+- `docker-compose.yml`: Named Volumes für `config/` und `rag/` (persistente Daten)
+- `.github/workflows/docker-publish.yml`: Baut Container-Image bei jedem Release auf ghcr.io

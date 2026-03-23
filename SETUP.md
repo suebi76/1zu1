@@ -2,14 +2,36 @@
 
 ## Voraussetzungen
 
-- Apache-Webserver mit PHP 8.0+ und aktiviertem `mod_rewrite`
-- PHP-Erweiterungen: `curl`, `fileinfo`, `mbstring` (auf den meisten Shared-Hosting-Anbietern vorinstalliert)
+- **Option A (Shared Hosting):** Apache-Webserver mit PHP 8.0+, `mod_rewrite`, `curl`, `fileinfo`, `mbstring`
+- **Option B (Docker):** Docker Engine oder Docker Desktop
 - HTTPS empfohlen (für sichere Übertragung des API-Keys)
 - Ein Google-Gemini-API-Key ([hier erstellen](https://aistudio.google.com/app/apikey))
 
 ---
 
-## Schritt 1: Dateien hochladen
+## Installation mit Docker (Alternative)
+
+Falls Docker bevorzugt wird, kann der Chatbot auch als Container gestartet werden:
+
+```bash
+docker compose up -d
+```
+
+Oder ohne docker-compose:
+
+```bash
+docker run -d -p 8080:80 ghcr.io/suebi76/1zu1:latest
+```
+
+Dann `http://localhost:8080/admin.php` aufrufen → Passwort setzen → API-Key eintragen → fertig.
+
+Die Daten (API-Key, Passwort, Chunks) werden in Docker-Volumes persistent gespeichert und überleben Container-Updates.
+
+---
+
+## Installation auf Apache (Shared Hosting)
+
+### Schritt 1: Dateien hochladen
 
 Den gesamten Ordner `KI Chatbot-1zu1/` per FTP auf den Webserver laden.
 
@@ -52,7 +74,7 @@ Die Ordnerstruktur auf dem Server sollte so aussehen:
 
 Der Key wird serverseitig in `config/config.php` gespeichert. Diese Datei ist per `.htaccess` gegen HTTP-Zugriff geschützt und nur über PHP erreichbar.
 
-> **Hinweis:** Solange kein gültiger API-Key eingetragen ist, ist der PDF-Upload deaktiviert und der Chatbot kann keine Antworten generieren.
+> **Hinweis:** Solange kein gültiger API-Key eingetragen ist, ist der PDF-Upload deaktiviert. Der Chatbot erkennt den fehlenden Key automatisch und leitet zum Admin-Bereich weiter.
 
 ---
 
@@ -116,6 +138,7 @@ Weitere Details: siehe `rag/ANLEITUNG.md`
 
 | Problem | Lösung |
 |---------|---------|
+| Chatbot leitet zu admin.php weiter | API-Key fehlt oder ist ungültig – in `admin.php` eintragen |
 | Chatbot antwortet nicht | API-Key in `admin.php` prüfen |
 | „Konfigurationsdatei nicht gefunden" | `config/` Ordner mit `.htaccess` vorhanden? |
 | PDF-Upload schlägt fehl | PHP `curl`-Erweiterung aktiv? `php -m \| grep curl` |

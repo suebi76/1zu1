@@ -20,53 +20,59 @@ Eine vollständige Chat-Anwendung mit:
 - **6 Vorlagen-Kategorien** mit vordefinierten Beratungsfragen
 - **Streaming-Antworten** per Server-Sent Events (SSE)
 - **PDF-Export** der KI-Antworten
+- **API-Key-Prüfung** – Chatbot erkennt fehlenden/ungültigen Key und leitet zum Admin-Bereich weiter
+- **Docker-Support** – Container-Image auf ghcr.io mit persistenter Datenspeicherung
 - **DSGVO-konform** – kein CDN, alle Abhängigkeiten lokal in `vendor/`, kein Tracking
+
+---
+
+## Schnellstart
+
+### Option A: Apache Shared Hosting
+
+1. Gesamten Ordner per FTP hochladen
+2. `https://deine-domain.de/admin.php` aufrufen → Passwort setzen → API-Key eintragen
+3. Fertig – der Chatbot ist unter `https://deine-domain.de/` erreichbar
+
+Ausführliche Anleitung: [SETUP.md](SETUP.md)
+
+### Option B: Docker
+
+```bash
+docker run -d -p 8080:80 ghcr.io/suebi76/1zu1:latest
+```
+
+Oder mit persistenten Daten (empfohlen):
+
+```bash
+docker compose up -d
+```
+
+Dann `http://localhost:8080/admin.php` → Passwort setzen → API-Key eintragen.
+
+**Voraussetzungen:** Google Gemini API-Key ([hier erstellen](https://aistudio.google.com/app/apikey))
 
 ---
 
 ## Dateistruktur
 
 ```
-index.html          Komplette React-App (System-Instruktion, Templates, UI, SchifT-Toggle)
-proxy.php           Gemini-API-Proxy: empfängt POST, injiziert RAG-Chunks, streamt SSE
-admin.php           Admin-Interface: Passwort-Setup, PDF-Upload → Gemini → Chunks
+index.html              Komplette React-App (System-Instruktion, Templates, UI, SchifT-Toggle)
+proxy.php               Gemini-API-Proxy: RAG-Chunks einbetten, SSE-Streaming, API-Key-Status-Check
+admin.php               Admin-Interface: Passwort-Setup, API-Key-Setup, PDF-Upload → Chunks
+Dockerfile              Container-Image (PHP 8.3 + Apache)
+docker-compose.yml      Docker Compose mit persistenten Volumes
+docker-entrypoint.sh    Initialisiert Volumes beim ersten Container-Start
 config/
-  config.php        GEMINI_API_KEY + MODEL_NAME  (nicht im Repo – siehe config.php.example)
-  config.php.example  Vorlage für die Konfigurationsdatei
-  .htaccess         Blockiert HTTP-Zugriff auf config/
+  config.php            GEMINI_API_KEY + MODEL_NAME (nicht im Repo – wird über admin.php erstellt)
+  config.php.example    Vorlage für die Konfigurationsdatei
+  .htaccess             Blockiert HTTP-Zugriff auf config/
 rag/
-  .htaccess         Blockiert HTTP-Zugriff auf rag/
-  ANLEITUNG.md      Format-Dokumentation für Chunks + Chunk-Übersicht
-  chunks/           26 Wissens-Chunks (Markdown mit YAML-Frontmatter)
-vendor/             Lokale Kopien: React, ReactDOM, Babel, Tailwind, marked, jsPDF
+  .htaccess             Blockiert HTTP-Zugriff auf rag/
+  ANLEITUNG.md          Format-Dokumentation für Chunks + Chunk-Übersicht
+  chunks/               26 Wissens-Chunks (Markdown mit YAML-Frontmatter)
+vendor/                 Lokale Kopien: React, ReactDOM, Babel, Tailwind, marked, jsPDF
 ```
-
----
-
-## Setup
-
-### 1. Konfiguration anlegen
-
-```bash
-cp config/config.php.example config/config.php
-```
-
-`config/config.php` öffnen und den echten Gemini API-Key eintragen:
-
-```php
-define('GEMINI_API_KEY', 'DEIN_KEY_AUS_GOOGLE_AI_STUDIO');
-define('MODEL_NAME',     'gemini-2.5-flash');
-```
-
-API-Key erstellen: [Google AI Studio](https://aistudio.google.com/app/apikey)
-
-### 2. Deployment (Apache Shared Hosting)
-
-Gesamten Ordner per FTP hochladen. Wichtig: `.htaccess`-Dateien in `config/` und `rag/` müssen vorhanden sein – ohne sie ist der API-Key über HTTP abrufbar.
-
-### 3. Admin-Interface einrichten
-
-`https://deine-domain.de/admin.php` aufrufen → beim ersten Aufruf Passwort setzen.
 
 ---
 
@@ -86,7 +92,7 @@ Gesamten Ordner per FTP hochladen. Wichtig: `.htaccess`-Dateien in `config/` und
 | Programmüberblick | 1 | `programm-ueberblick.md` |
 | Serienbrieffunktion | 1 | `serienbrieffunktion.md` |
 
-Neue Chunks per FTP in `rag/chunks/` hochladen oder über `admin.php` aus PDFs erstellen. Siehe `rag/ANLEITUNG.md`.
+Neue Chunks per FTP in `rag/chunks/` hochladen oder über `admin.php` aus PDFs erstellen. Siehe [rag/ANLEITUNG.md](rag/ANLEITUNG.md).
 
 ---
 
