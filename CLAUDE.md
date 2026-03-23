@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Projekt
 
 **1:1-Ausstattung Niedersachsen – Beratungs-Assistent** — Spezialisierter KI-Chatbot für
-medienpädagogische Beraterinnen und Berater (MBen) zur Unterstützung bei der Beratung
+medienpädagogische Beraterinnen und Berater (MPB) zur Unterstützung bei der Beratung
 von Lehrkräften und Schulleitungen im Rahmen des 1:1-Ausstattungsprogramms Niedersachsen.
 Lizenz: CC BY 4.0. Deployment-Ziel: Apache Shared Hosting (PHP, kein Node/Python).
 
@@ -71,7 +71,7 @@ Alle App-Logik in einem einzigen `<script type="text/babel">`-Block:
 | `downloadAsPdf` | Direktes jsPDF-Text-API, Dateiname: `1zu1-ausstattung-antwort.pdf` |
 | `applyTemplate` | Setzt Prompt in inputText, wechselt zu Chat-Ansicht |
 | `quickQuestions` | 6 Fragen (öffentlich) + 6 Fragen (SchifT), abhängig von `isSchifT` |
-| `PrivacyModal` | Datenschutzhinweis (Beratungsunterstützung MBen) |
+| `PrivacyModal` | Datenschutzhinweis (Beratungsunterstützung MPB) |
 | `DSBModal` | Technische Datenschutzdokumentation für DSB |
 | JSX return | Header mit SchifT-Toggle, Chat-/Vorlagen-Ansicht, Footer |
 

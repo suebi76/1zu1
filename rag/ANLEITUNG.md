@@ -37,7 +37,7 @@ Ein Chunk sollte genau ein Thema / ein Konzept behandeln.
   Lieber `leihvertrag-sus-01.md`, `leihvertrag-sus-02.md` als eine riesige Datei.
 
 - **Tags sind entscheidend für die Suche.** Trage alle Begriffe ein,
-  nach denen MBen fragen könnten. Mindestens 8-14 Tags pro Chunk.
+  nach denen MPB fragen könnten. Mindestens 8-14 Tags pro Chunk.
   Beispiel: `tags: schaden, verlust, diebstahl, 5-phasen, RLSB, IT.N, gerätepool, schadensersatz`
 
 - **Synonyme in Tags aufnehmen**: Schüler/SuS, Schaden/Beschädigung,
@@ -47,7 +47,7 @@ Ein Chunk sollte genau ein Thema / ein Konzept behandeln.
 
 - **Quellen immer angeben** – die KI nennt sie dann in der Antwort.
 
-- **Sprache**: Deutsch. Fachbegriffe so schreiben wie MBen sie eingeben.
+- **Sprache**: Deutsch. Fachbegriffe so schreiben wie MPB sie eingeben.
 
 ---
 

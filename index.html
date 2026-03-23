@@ -64,7 +64,7 @@
         /**
          * 1:1-Ausstattung Niedersachsen – Beratungs-Assistent
          *
-         * KI-Chatbot für medienpädagogische Beraterinnen und Berater (MBen)
+         * KI-Chatbot für medienpädagogische Beraterinnen und Berater (MPB)
          * zur Unterstützung bei der Beratung von Lehrkräften und Schulleitungen
          * im Rahmen des 1:1-Ausstattungsprogramms Niedersachsen.
          *
@@ -142,7 +142,7 @@
 
             // ── System-Instruktion ────────────────────────────────────────────────
             const systemInstruction = `ROLLE & KONTEXT:
-Du bist ein spezialisierter KI-Assistent für das 1:1-Ausstattungsprogramm des Landes Niedersachsen. Du unterstützt medienpädagogische Beraterinnen und Berater (MBen) bei der Beratung von Lehrkräften und Schulleitungen rund um die Ausgabe und Verwaltung digitaler Endgeräte ab Jahrgang 7 (Start: Schuljahr 2026/27). Deine Antworten sind präzise, fachlich fundiert und beziehen sich auf die offiziellen Dokumente des Bildungsportals Niedersachsen.
+Du bist ein spezialisierter KI-Assistent für das 1:1-Ausstattungsprogramm des Landes Niedersachsen. Du unterstützt medienpädagogische Beraterinnen und Berater (MPB) bei der Beratung von Lehrkräften und Schulleitungen rund um die Ausgabe und Verwaltung digitaler Endgeräte ab Jahrgang 7 (Start: Schuljahr 2026/27). Deine Antworten sind präzise, fachlich fundiert und beziehen sich auf die offiziellen Dokumente des Bildungsportals Niedersachsen.
 
 THEMATISCHER SCOPE – Du beantwortest AUSSCHLIESSLICH Fragen zu diesen 9 Bereichen:
 1. Geräteausgabe und -verwaltung: Bestellung über den IT.N-Webshop, MDM-Integration (Schul-ID/DEP-Nummer), Gerätepool, Inventarisierung, Anlieferung, Vollständigkeits- und Funktionsprüfung, Lagerung, Ausgabe an Erziehungsberechtigte.
@@ -516,7 +516,7 @@ QUALITAETSSTANDARDS:
                         <div className="px-6 py-5 space-y-5 text-sm text-slate-700">
                             <section>
                                 <h3 className="font-bold text-[#0a192f] mb-1">Was macht diese App?</h3>
-                                <p>Der <strong>Beratungs-Assistent 1:1-Ausstattung</strong> ist ein spezialisierter KI-Assistent für medienpädagogische Beraterinnen und Berater (MBen). Er beantwortet ausschliesslich Fragen zum <strong>1:1-Ausstattungsprogramm Niedersachsen</strong>: Geräteausgabe, Leihverträge, Schadensprozesse, Formulare, Schulen in freier Trägerschaft, Gerätetypen, Software und Rücknahme. Die KI-Antworten werden von <strong>Google Gemini</strong> auf Basis einer Wissensdatenbank generiert. Anfragen zu anderen Themen oder mit personenbezogenen Daten werden aktiv abgewiesen.</p>
+                                <p>Der <strong>Beratungs-Assistent 1:1-Ausstattung</strong> ist ein spezialisierter KI-Assistent für medienpädagogische Beraterinnen und Berater (MPB). Er beantwortet ausschliesslich Fragen zum <strong>1:1-Ausstattungsprogramm Niedersachsen</strong>: Geräteausgabe, Leihverträge, Schadensprozesse, Formulare, Schulen in freier Trägerschaft, Gerätetypen, Software und Rücknahme. Die KI-Antworten werden von <strong>Google Gemini</strong> auf Basis einer Wissensdatenbank generiert. Anfragen zu anderen Themen oder mit personenbezogenen Daten werden aktiv abgewiesen.</p>
                             </section>
                             <section>
                                 <h3 className="font-bold text-[#0a192f] mb-1">Welche Daten werden verarbeitet?</h3>
@@ -581,7 +581,7 @@ QUALITAETSSTANDARDS:
                             </section>
                             <section>
                                 <h3 className="font-bold text-[#0a192f] text-base mb-2">2. Zweck der Verarbeitung (Art. 5 Abs. 1 lit. b DSGVO)</h3>
-                                <p>Die Anwendung dient ausschliesslich der <strong>Beratungsunterstützung medienpädagogischer Beraterinnen und Berater (MBen)</strong> im Rahmen des 1:1-Ausstattungsprogramms Niedersachsen. Sie beantwortet Fragen zu Geräteausgabe, Leihverträgen, Schadensprozessen, Formularen, Schulen in freier Trägerschaft, Gerätetypen, Software, Rücknahme und Datenschutz. Eine Verarbeitung personenbezogener Daten ist durch die System-Anweisung an das Modell explizit untersagt und wird aktiv abgewiesen.</p>
+                                <p>Die Anwendung dient ausschliesslich der <strong>Beratungsunterstützung medienpädagogischer Beraterinnen und Berater (MPB)</strong> im Rahmen des 1:1-Ausstattungsprogramms Niedersachsen. Sie beantwortet Fragen zu Geräteausgabe, Leihverträgen, Schadensprozessen, Formularen, Schulen in freier Trägerschaft, Gerätetypen, Software, Rücknahme und Datenschutz. Eine Verarbeitung personenbezogener Daten ist durch die System-Anweisung an das Modell explizit untersagt und wird aktiv abgewiesen.</p>
                             </section>
                             <section>
                                 <h3 className="font-bold text-[#0a192f] text-base mb-2">3. Rechtsgrundlage (Art. 6 DSGVO)</h3>
@@ -599,7 +599,7 @@ QUALITAETSSTANDARDS:
                             <section>
                                 <h3 className="font-bold text-[#0a192f] text-base mb-2">5. Datenfluss (technisch)</h3>
                                 <div className="bg-[#0a192f] text-slate-300 rounded-xl p-4 font-mono text-xs space-y-1">
-                                    <p>Browser (MBe)</p>
+                                    <p>Browser (MPB)</p>
                                     <p className="pl-4 text-[#e50046]">{'\u2192'} HTTPS POST {'\u2192'} proxy.php (Webserver)</p>
                                     <p className="pl-8">Payload: {"{ contents: [...], systemInstruction }"}</p>
                                     <p className="pl-8 text-slate-500">lädt API-Key aus config/config.php (per .htaccess gesperrt)</p>
@@ -765,7 +765,7 @@ QUALITAETSSTANDARDS:
                                                 <div className={`flex items-center gap-2 mb-2 ${msg.role === 'user' ? 'opacity-90 text-xs' : 'text-[#0a192f] font-bold text-xs'}`}>
                                                     <Icon name={msg.role === 'user' ? 'user' : 'bot'} className="w-3 h-3" />
                                                     <span className="uppercase tracking-wider">
-                                                        {msg.role === 'user' ? 'MBe' : 'KI-Assistent'}
+                                                        {msg.role === 'user' ? 'MPB' : 'KI-Assistent'}
                                                     </span>
                                                 </div>
                                                 {msg.role === 'bot' ? (
